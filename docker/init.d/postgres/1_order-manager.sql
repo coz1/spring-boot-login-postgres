@@ -1,0 +1,5 @@
+-- CREATE USER "order-manager" PASSWORD 'order-manager';
+-- CREATE DATABASE "order-manager" WITH OWNER "order-manager";
+--
+-- CREATE USER "transport-scheduler" PASSWORD 'transport-scheduler';
+-- CREATE DATABASE "transport-scheduler" WITH OWNER "transport-scheduler";

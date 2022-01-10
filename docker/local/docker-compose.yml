@@ -1,0 +1,36 @@
+services:
+
+  rabbitmq:
+    hostname: ${RABBITMQ_HOSTNAME:-rabbitmq-local}
+    extends:
+      file: ../base/rabbitmq.yml
+      service: rabbitmq
+    ports:
+      - 127.0.0.1:${RABBITMQ_EXPOSE_PORT_1:-5672}:5672    # AMQP
+      - 127.0.0.1:${RABBITMQ_EXPOSE_PORT_2:-15672}:15672  # Management UI
+      - 127.0.0.1:${RABBITMQ_EXPOSE_PORT_3:-1884}:1883    # MQTT
+      - 127.0.0.1:${RABBITMQ_EXPOSE_PORT_4:-61613}:61613  # STOMP
+      - 127.0.0.1:${RABBITMQ_EXPOSE_PORT_5:-15675}:15675  # MQTT over Websocket
+
+  postgres:
+    extends:
+      file: ../base/postgres.yml
+      service: postgres
+    volumes:
+      - ../init.d/postgres/:/docker-entrypoint-initdb.d/
+    ports:
+      - 127.0.0.1:${POSTGRES_EXPOSE_PORT_1:-5432}:5432
+
+  springbootapp:
+    image: springbootapp:latest
+    network_mode: bridge
+    container_name: springbootapp
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    links:
+      - postgres

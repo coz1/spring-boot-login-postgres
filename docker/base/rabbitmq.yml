@@ -1,0 +1,11 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    hostname: ${RABBITMQ_HOSTNAME:-rabbitmq}
+    volumes:
+      - ./rabbitmq_enabled_plugins:/etc/rabbitmq/enabled_plugins
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 30s # do not change this
+      timeout: 30s
+      retries: 3
